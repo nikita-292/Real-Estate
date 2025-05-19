@@ -23,3 +23,17 @@ app.listen(3000, () => {
 
 app.use('/api/user', userRouter); // use the user router for the api/user route
 app.use('/api/auth', authRouter);
+
+//middleware error from ip  next call for the next middleware
+// Error-handling middleware
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;  // Use logical OR for fallback
+  const message = err.message || 'Internal Server Error';  // Fallback message
+  return res.status(statusCode).json({
+    success: false,
+    statusCode,
+    message,
+  });
+});
+
+ 
