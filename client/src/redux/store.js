@@ -4,11 +4,10 @@ import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
 //combine reducer mthod
-const rootReducer = combineReducers({
-  user: userReducer,
-});
+const rootReducer = combineReducers({ user: userReducer });
 
-const persistConfig = { //local storage name 
+//local storage name 
+const persistConfig = {
   key: 'root',
   storage,
   version: 1,
@@ -23,4 +22,5 @@ export const store = configureStore({
       serializableCheck: false,
     }),
 });
+
 export const persistor = persistStore(store);
