@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js';
+import cookieParser from 'cookie-parser';  
 dotenv.config();
 
 mongoose.connect(process.env.MONGO).then(() => {
@@ -15,6 +16,9 @@ mongoose.connect(process.env.MONGO).then(() => {
 
 const app = express();
 app.use(express.json()); // middleware to parse json data from the request body
+
+app.use(cookieParser()); //tpget the info from the cookies that we have stored
+
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
 })
