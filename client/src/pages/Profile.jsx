@@ -9,12 +9,15 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailure,
+  signOutUserStart,
+  signOutUserSuccess,
+  signOutUserFailure,
 } from "../redux/user/userSlice";
 import { set } from "mongoose";
 
 export default function Profile() {
   const fileRef = useRef(null);
-  const { currentUser ,error} = useSelector((state) => state.user);
+  const { currentUser, error } = useSelector((state) => state.user);
   const [file, setFile] = useState(undefined);
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
@@ -89,9 +92,9 @@ export default function Profile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      
-      console.log('Form data being submitted:', formData);
-      
+
+      console.log("Form data being submitted:", formData);
+
       // Only include password if it's not empty
       const updateData = {
         username: formData.username,
@@ -100,7 +103,7 @@ export default function Profile() {
         ...(formData.password && { password: formData.password }),
       };
 
-      console.log('Update data:', updateData); // Log the data being sent to the server
+      console.log("Update data:", updateData); // Log the data being sent to the server
 
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "POST",
@@ -111,9 +114,8 @@ export default function Profile() {
       });
 
       const data = await res.json();
-      
-      
-      console.log('Response from server:', data); 
+
+      console.log("Response from server:", data);
 
       if (data.success === false) {
         dispatch(updateUserFailure(data.message));
@@ -123,31 +125,45 @@ export default function Profile() {
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
     } catch (error) {
-      console.error('Update error:', error); 
+      console.error("Update error:", error);
       dispatch(updateUserFailure(error.message));
     }
   };
 
   const handleDeleteUser = async () => {
-  try {
-    dispatch(deleteUserStart());
+    try {
+      dispatch(deleteUserStart());
 
-    const res = await fetch(`/api/user/delete/${currentUser._id}`, {
-      method: 'DELETE',
-    });
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (data.success === false) {
-      dispatch(deleteUserFailure(data.message));
-      return;
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message));
+        return;
+      }
+
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
     }
-
-    dispatch(deleteUserSuccess(data));
-  } catch (error) {
-    dispatch(deleteUserFailure(error.message));
-  }
-};
+  };
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutUserStart());
+      const res = await fetch("/api/auth/signout");
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(signOutUserFailure(data.message));
+        return;
+      }
+      dispatch(signOutUserSuccess(data));
+    } catch (error) {
+      dispatch(signOutUserFailure(error.message));
+    }
+  };
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -224,13 +240,21 @@ export default function Profile() {
         </button>
       </form>
       <div className="flex justify-between mt-5">
-        <span onClick={handleDeleteUser} className="text-red-700 cursor-pointer">Delete Account</span>
-        <span className="text-red-700 cursor-pointer">Sign Out</span>
+        <span
+          onClick={handleDeleteUser}
+          className="text-red-700 cursor-pointer"
+        >
+          Delete Account
+        </span>
+        <span onClick={handleSignOut} className="text-red-700 cursor-pointer">
+          Sign Out
+        </span>
       </div>
 
-           {/* <p className="text-red-700 mt-5">{error ? error :""}</p> */}
-        <p className="text-green-700 mt-5">{updateSuccess ?"User updated successfully!":""}</p> 
-    
+      {/* <p className="text-red-700 mt-5">{error ? error :""}</p> */}
+      <p className="text-green-700 mt-5">
+        {updateSuccess ? "User updated successfully!" : ""}
+      </p>
     </div>
   );
 }
