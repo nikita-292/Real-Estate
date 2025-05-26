@@ -5,12 +5,11 @@ import bcryptjs from "bcryptjs";
 
 export const test = (req, res) => {
   res.json({
-    message: "api route working ",
+    message: "Api route working ",
   });
 };
 
 export const updateUser = async (req, res, next) => {
-
   if  (req.user.id !== req.params.id) {
     // req.params.id ye we get from the root ===/update/:id'
     return next(errorHandler(401, "You can only update your own account!"));

@@ -42,6 +42,15 @@ export const google = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (user) {
+      // Update existing user's avatar if it's different
+      // if (user.avatar !== req.body.photo) {
+      //   user.avatar = req.body.photo;
+      //   await user.save();
+      // }
+
+      //console.log("Avatar : ",user.avatar);
+      //console.log("Req : ",req.body.photo);
+      
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = user._doc;
       res
@@ -63,6 +72,9 @@ export const google = async (req, res, next) => {
         password: hashedPassword,
         avatar: req.body.photo,
       });
+
+      //console.log("New user created with email:", newUser.avatar);
+      
       await newUser.save();
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = newUser._doc;
