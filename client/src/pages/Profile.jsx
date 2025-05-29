@@ -23,11 +23,12 @@ export default function Profile() {
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({
-    username: currentUser?.username || "",
-    email: currentUser?.email || "",
-    password: "",
-    avatar: currentUser?.avatar || "",
+     username: currentUser?.username || "",
+  email: currentUser?.email || "",
+  password: "",
+  avatar: currentUser?.avatar || "",
   });
+  
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [showListingsError, setShowListingsError] = useState(false);
   const [userListings, setUserListings] = useState([]);
@@ -96,7 +97,7 @@ export default function Profile() {
     try {
       dispatch(updateUserStart());
 
-      console.log("Form data being submitted:", formData);
+      // console.log("Form data being submitted:", formData);
 
       // Only include password if it's not empty
       const updateData = {
@@ -106,7 +107,7 @@ export default function Profile() {
         ...(formData.password && { password: formData.password }),
       };
 
-      console.log("Update data:", updateData); // Log the data being sent to the server
+      // console.log("Update data:", updateData); // Log the data being sent to the server
 
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "POST",
@@ -118,7 +119,7 @@ export default function Profile() {
 
       const data = await res.json();
 
-      console.log("Response from server:", data);
+      // console.log("Response from server:", data);
 
       if (data.success === false) {
         dispatch(updateUserFailure(data.message));
@@ -310,7 +311,7 @@ export default function Profile() {
           <h1 className="text-center mt-7 text-2xl font-semibold">
             Your Listings
           </h1>
-          {userListings.map((listing) => (
+          { userListings.map((listing) => (
             <div
               key={listing._id}
               className="border rounded-lg p-3 flex justify-between items-center gap-4"
