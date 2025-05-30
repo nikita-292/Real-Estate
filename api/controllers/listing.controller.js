@@ -108,7 +108,7 @@ export const getListings = async (req, res, next) => {
     })
       .sort({ [sort]: order }) //we wanna sort it on the  taken  order
       .limit(limit) //and we limit and 
-      .skip(startIndex); //agar limit 9 and idex is 0 toh start 9 show krega warna 1 toh skip frist 9   
+      .skip(startIndex); //agar limit 9 and idex is 0 toh start 9 show krega warna 1 toh skip frist 9    
 
     return res.status(200).json(listings);
   } catch (error) {
