@@ -14,8 +14,7 @@ export const verifyToken = (req, res, next) => {
     if (err) {
       return next(errorHandler(403, 'Forbidden'));
     }
-    req.user = user;
-    
+    // req.user = user;
     next(); //then we go to the update user route in user.controller and user route
 
   });
