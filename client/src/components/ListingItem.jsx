@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MdLocationOn } from 'react-icons/md';
+import { MdLocationOn } from 'react-icons/md'; //icon of location 
 
 export default function ListingItem({ listing }) {
   return (
@@ -24,6 +24,7 @@ export default function ListingItem({ listing }) {
             </p>
           </div>
           <p className='text-sm text-gray-600 line-clamp-2'>
+            {/*line-clamp-2to truncatee in one line*/}
             {listing.description}
           </p>
           <p className='text-slate-500 mt-2 font-semibold '>
